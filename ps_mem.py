@@ -146,10 +146,6 @@ def parse_options():
         sys.stderr.write(help())
         sys.exit(3)
 
-    if len(args):
-        sys.stderr.write("Extraneous arguments: %s\n" % args)
-        sys.exit(3)
-
     # ps_mem.py options
     split_args = False
     pids_to_show = None
@@ -176,6 +172,18 @@ def parse_options():
             except:
                 sys.stderr.write(help())
                 sys.exit(3)
+
+    if len(args):
+        notpids = []
+        for x in args:
+            try:
+                int(x)
+                pids_to_show.extend([x])
+            except:
+                notpids.extend([x])
+        if len(notpids):
+            sys.stderr.write("Extraneous arguments: %s\n" % args)
+            sys.exit(3)
 
     return (split_args, pids_to_show, watch, only_total)
 
